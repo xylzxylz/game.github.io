@@ -1,27 +1,1563 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人网站</title>
-    <style>
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; margin: 0; padding: 0; background: #f4f4f4; }
-        header { background: #333; color: #fff; padding: 1rem; text-align: center; }
-        .container { width: 80%; margin: auto; overflow: hidden; padding: 2rem; background: #fff; margin-top: 20px; border-radius: 8px; }
-        h1 { color: #333; }
-        .btn { display: inline-block; background: #ff4757; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px; }
-        .btn:hover { background: #e84118; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS GAME — 全网最火爆游戏平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== CSS VARIABLES ===== */
+  :root {
+    --bg-deep: #020409;
+    --bg-dark: #060c1a;
+    --bg-card: #0a1020;
+    --bg-card2: #0d1526;
+    --accent: #f97316;
+    --accent2: #ff6b00;
+    --neon-blue: #00d4ff;
+    --neon-cyan: #0ff0fc;
+    --neon-purple: #b44dff;
+    --text-primary: #e8edf5;
+    --text-secondary: #7a8aaa;
+    --text-muted: #3d4f6e;
+    --border: rgba(0, 212, 255, 0.12);
+    --border-accent: rgba(249, 115, 22, 0.4);
+    --glow-orange: 0 0 20px rgba(249,115,22,0.4), 0 0 60px rgba(249,115,22,0.15);
+    --glow-blue: 0 0 20px rgba(0,212,255,0.3), 0 0 60px rgba(0,212,255,0.1);
+    --ff-display: 'Orbitron', monospace;
+    --ff-ui: 'Rajdhani', sans-serif;
+    --ff-body: 'Noto Sans SC', sans-serif;
+  }
+
+  /* ===== RESET ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--ff-body);
+    overflow-x: hidden;
+    cursor: default;
+  }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+  button { border: none; cursor: pointer; font-family: inherit; }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ===== SCAN LINE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* ===== GRID BACKGROUND ===== */
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: 64px;
+    background: rgba(2,4,9,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 2rem;
+    gap: 2rem;
+  }
+  .navbar::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow: var(--glow-orange);
+  }
+  .nav-logo-icon::before {
+    content: '';
+    position: absolute; inset: 3px;
+    border: 1px solid rgba(249,115,22,0.5);
+    border-radius: 3px;
+  }
+  .nav-logo-icon span {
+    font-family: var(--ff-display);
+    font-size: 11px; font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .nav-logo-text {
+    font-family: var(--ff-display);
+    font-size: 18px; font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+  }
+  .nav-logo-text em {
+    color: var(--accent);
+    font-style: normal;
+  }
+  .nav-links {
+    display: flex; gap: 0; flex: 1;
+    list-style: none;
+  }
+  .nav-links a {
+    display: block;
+    padding: 0 1.2rem;
+    height: 64px;
+    line-height: 64px;
+    font-family: var(--ff-ui);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: 0; left: 1.2rem; right: 1.2rem;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-links a.active { color: var(--accent); }
+  .nav-links a.active::after { transform: scaleX(1); }
+  .nav-search {
+    position: relative; margin-left: auto;
+  }
+  .nav-search input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 7px 36px 7px 14px;
+    color: var(--text-primary);
+    font-family: var(--ff-body);
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .nav-search input::placeholder { color: var(--text-muted); }
+  .nav-search input:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 12px rgba(0,212,255,0.15);
+  }
+  .nav-search-icon {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 14px;
+  }
+  .nav-actions { display: flex; gap: 10px; }
+  .btn-login {
+    padding: 7px 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-family: var(--ff-ui);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-login:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+  .btn-register {
+    padding: 7px 18px;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: #fff;
+    font-family: var(--ff-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    box-shadow: 0 0 14px rgba(249,115,22,0.3);
+  }
+  .btn-register:hover {
+    background: #ff6b00;
+    box-shadow: 0 0 24px rgba(249,115,22,0.5);
+    transform: translateY(-1px);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    overflow: hidden;
+    padding-top: 64px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(249,115,22,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 10% 80%, rgba(0,212,255,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 40% at 80% 10%, rgba(180,77,255,0.05) 0%, transparent 50%),
+      var(--bg-dark);
+  }
+  .hero-circuit {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='none'/%3E%3Cpath d='M0 200 L80 200 L80 120 L160 120 L160 200 L240 200 M240 200 L240 280 L320 280 L320 200 L400 200' stroke='rgba(0,212,255,0.06)' stroke-width='1' fill='none'/%3E%3Ccircle cx='80' cy='200' r='3' fill='rgba(0,212,255,0.2)'/%3E%3Ccircle cx='160' cy='120' r='3' fill='rgba(249,115,22,0.2)'/%3E%3Ccircle cx='240' cy='280' r='3' fill='rgba(0,212,255,0.2)'/%3E%3Ccircle cx='320' cy='200' r='3' fill='rgba(249,115,22,0.2)'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 700px;
+    padding: 0 4rem;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.3);
+    border-radius: 2px;
+    padding: 6px 14px;
+    font-family: var(--ff-ui);
+    font-size: 11px; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero-title {
+    font-family: var(--ff-display);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+  }
+  .hero-title .line1 { color: #fff; }
+  .hero-title .line2 {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(249,115,22,0.4);
+  }
+  .hero-title .line3 {
+    color: var(--neon-blue);
+    text-shadow: 0 0 40px rgba(0,212,255,0.3);
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+  }
+  .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    background: var(--accent);
+    border-radius: 4px;
+    color: #fff;
+    font-family: var(--ff-ui);
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 24px rgba(249,115,22,0.4);
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover {
+    background: #ff6b00;
+    box-shadow: 0 0 40px rgba(249,115,22,0.6);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    border-radius: 4px;
+    color: var(--neon-blue);
+    font-family: var(--ff-ui);
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 16px rgba(0,212,255,0.15);
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .btn-secondary:hover {
+    background: rgba(0,212,255,0.05);
+    box-shadow: 0 0 30px rgba(0,212,255,0.3);
+    transform: translateY(-2px);
+  }
+  .hero-stats {
+    position: absolute; bottom: 3rem; left: 4rem;
+    display: flex; gap: 3rem;
+    z-index: 2;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: var(--ff-display);
+    font-size: 28px; font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .hero-visual {
+    position: absolute; right: 4%;
+    top: 50%; transform: translateY(-50%);
+    width: min(42vw, 520px);
+    z-index: 2;
+  }
+  .hero-game-showcase {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: var(--bg-card);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .hero-game-showcase::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg,
+      rgba(249,115,22,0.15) 0%,
+      rgba(0,212,255,0.08) 50%,
+      rgba(180,77,255,0.08) 100%
+    );
+  }
+  .showcase-inner {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+  }
+  .showcase-title {
+    font-family: var(--ff-display);
+    font-size: 22px; font-weight: 900;
+    color: #fff;
+    letter-spacing: 4px;
+    text-shadow: 0 0 30px rgba(249,115,22,0.5);
+  }
+  .showcase-sub {
+    font-family: var(--ff-ui);
+    font-size: 11px;
+    color: var(--neon-blue);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .showcase-rating {
+    display: flex; gap: 3px;
+    margin-top: 8px;
+  }
+  .showcase-rating span {
+    color: var(--accent);
+    font-size: 16px;
+  }
+  .showcase-corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--accent);
+    border-style: solid;
+    border-width: 0;
+  }
+  .showcase-corner.tl { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; }
+  .showcase-corner.tr { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; }
+  .showcase-corner.bl { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px; }
+  .showcase-corner.br { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; }
+  .showcase-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--ff-ui);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .showcase-float-cards {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .float-card {
+    background: rgba(6,12,26,0.9);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    backdrop-filter: blur(10px);
+    animation: floatAnim 3s ease-in-out infinite;
+  }
+  .float-card:nth-child(2) { animation-delay: 1.5s; }
+  @keyframes floatAnim {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .float-card-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .float-card-dot.online { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+  .float-card-dot.hot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .float-card-text { font-size: 12px; color: var(--text-primary); }
+  .float-card-num {
+    font-family: var(--ff-display);
+    font-size: 11px;
+    color: var(--neon-blue);
+    margin-left: auto;
+  }
+
+  /* ===== SECTION COMMON ===== */
+  .section { position: relative; z-index: 2; padding: 5rem 2rem; }
+  .section-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+  .section-title-group {}
+  .section-label {
+    font-family: var(--ff-ui);
+    font-size: 11px; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::before {
+    content: '';
+    width: 20px; height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: clamp(22px, 3.5vw, 38px);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .section-link {
+    font-family: var(--ff-ui);
+    font-size: 13px; font-weight: 600;
+    color: var(--neon-blue);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+    transition: gap 0.2s;
+  }
+  .section-link:hover { gap: 10px; }
+  .container { max-width: 1400px; margin: 0 auto; }
+
+  /* ===== CATEGORIES ===== */
+  .categories { background: rgba(6,12,26,0.6); }
+  .cat-tabs {
+    display: flex; gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .cat-tab {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-secondary);
+    font-family: var(--ff-ui);
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(249,115,22,0.3);
+  }
+
+  /* ===== GAME CARDS GRID ===== */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .game-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+    position: relative;
+  }
+  .game-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(249,115,22,0.4);
+    box-shadow: 0 8px 40px rgba(249,115,22,0.15);
+  }
+  .game-card-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--bg-card2);
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .game-card-img-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-display);
+    font-size: 48px; font-weight: 900;
+    letter-spacing: -2px;
+  }
+  .game-card-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--bg-card) 100%);
+  }
+  .game-tags-overlay {
+    position: absolute; top: 10px; left: 10px;
+    display: flex; gap: 6px;
+  }
+  .tag {
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-family: var(--ff-ui);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .tag-hot { background: rgba(249,115,22,0.85); color: #fff; }
+  .tag-new { background: rgba(0,212,255,0.85); color: #000; }
+  .tag-top { background: rgba(180,77,255,0.85); color: #fff; }
+  .tag-free { background: rgba(34,197,94,0.85); color: #000; }
+  .game-card-body { padding: 1rem 1.2rem; }
+  .game-card-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .game-card-name {
+    font-family: var(--ff-ui);
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+  .game-rating {
+    display: flex; align-items: center; gap: 3px;
+    flex-shrink: 0;
+  }
+  .game-rating span:first-child { color: var(--accent); font-size: 12px; }
+  .game-rating span:last-child {
+    font-family: var(--ff-display);
+    font-size: 13px; font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .game-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .game-card-footer {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .game-dl {
+    font-family: var(--ff-ui);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+  .game-dl strong { color: var(--neon-blue); }
+  .btn-dl {
+    padding: 6px 16px;
+    background: rgba(249,115,22,0.1);
+    border: 1px solid rgba(249,115,22,0.4);
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: var(--ff-ui);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-dl:hover {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 14px rgba(249,115,22,0.4);
+  }
+  /* TOP indicator */
+  .top-badge {
+    position: absolute; top: 0; right: 0;
+    width: 0; height: 0;
+    border-top: 46px solid var(--accent);
+    border-left: 46px solid transparent;
+  }
+  .top-badge span {
+    position: absolute;
+    top: -44px; right: 2px;
+    font-family: var(--ff-display);
+    font-size: 12px; font-weight: 900;
+    color: #fff;
+    transform: rotate(45deg);
+  }
+
+  /* ===== RANKING SECTION ===== */
+  .ranking-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+  }
+  @media (max-width: 1024px) { .ranking-layout { grid-template-columns: 1fr; } }
+  .rank-list { display: flex; flex-direction: column; gap: 10px; }
+  .rank-item {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 20px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .rank-item:hover {
+    border-color: rgba(249,115,22,0.3);
+    background: rgba(249,115,22,0.03);
+    transform: translateX(4px);
+  }
+  .rank-num {
+    font-family: var(--ff-display);
+    font-size: 22px; font-weight: 900;
+    min-width: 36px; text-align: center;
+    line-height: 1;
+  }
+  .rank-num.gold { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.5); }
+  .rank-num.silver { color: #c0c0c0; }
+  .rank-num.bronze { color: #cd7f32; }
+  .rank-num.other { color: var(--text-muted); }
+  .rank-cover {
+    width: 56px; height: 40px;
+    border-radius: 4px;
+    background: var(--bg-card2);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    border: 1px solid var(--border);
+  }
+  .rank-info { flex: 1; min-width: 0; }
+  .rank-name {
+    font-family: var(--ff-ui);
+    font-size: 15px; font-weight: 700;
+    color: #fff; margin-bottom: 3px;
+  }
+  .rank-meta {
+    display: flex; gap: 12px;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .rank-meta span { display: flex; align-items: center; gap: 4px; }
+  .rank-heat {
+    font-family: var(--ff-display);
+    font-size: 14px; font-weight: 700;
+    color: var(--accent);
+    text-align: right;
+  }
+  .rank-heat small {
+    display: block;
+    font-family: var(--ff-body);
+    font-size: 10px; font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+  .heat-bar {
+    width: 60px; height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+  .heat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), #ffd700);
+    box-shadow: 0 0 8px rgba(249,115,22,0.5);
+  }
+
+  /* Leaderboard sidebar */
+  .leaderboard {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    align-self: start;
+  }
+  .leaderboard-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(249,115,22,0.04);
+    font-family: var(--ff-display);
+    font-size: 13px; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .leaderboard-header::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  .leaderboard-list { padding: 10px 0; }
+  .lb-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    transition: background 0.2s;
+  }
+  .lb-item:hover { background: rgba(255,255,255,0.02); }
+  .lb-rank {
+    font-family: var(--ff-display);
+    font-size: 14px; font-weight: 700;
+    min-width: 24px;
+  }
+  .lb-rank.r1 { color: #ffd700; }
+  .lb-rank.r2 { color: #c0c0c0; }
+  .lb-rank.r3 { color: #cd7f32; }
+  .lb-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--bg-card2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+  }
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-name {
+    font-family: var(--ff-ui);
+    font-size: 13px; font-weight: 700;
+    color: #fff;
+  }
+  .lb-level {
+    font-size: 11px;
+    color: var(--neon-blue);
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 2px;
+  }
+  .lb-score {
+    font-family: var(--ff-display);
+    font-size: 13px; font-weight: 700;
+    color: var(--accent);
+    text-align: right;
+  }
+
+  /* ===== NEW RELEASES ===== */
+  .new-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+  }
+  .new-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .new-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0,212,255,0.3);
+    box-shadow: 0 6px 30px rgba(0,212,255,0.1);
+  }
+  .new-card-img {
+    aspect-ratio: 16/9;
+    background: var(--bg-card2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    position: relative;
+  }
+  .new-card-body { padding: 12px 14px; }
+  .new-card-name {
+    font-family: var(--ff-ui);
+    font-size: 14px; font-weight: 700;
+    color: #fff; margin-bottom: 4px;
+  }
+  .new-card-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .btn-pre {
+    width: 100%;
+    padding: 7px;
+    background: transparent;
+    border: 1px solid rgba(0,212,255,0.4);
+    border-radius: 3px;
+    color: var(--neon-blue);
+    font-family: var(--ff-ui);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .btn-pre:hover {
+    background: rgba(0,212,255,0.08);
+    box-shadow: 0 0 12px rgba(0,212,255,0.2);
+  }
+
+  /* ===== COMMUNITY ===== */
+  .community-section { background: rgba(6,12,26,0.5); }
+  .community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .community-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .community-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+  .community-card.purple-accent::before { background: linear-gradient(90deg, var(--neon-purple), transparent); }
+  .community-card.blue-accent::before { background: linear-gradient(90deg, var(--neon-blue), transparent); }
+  .community-card.orange-accent::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .community-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
+  .community-card:hover::before { opacity: 1; }
+  .comm-icon { font-size: 32px; margin-bottom: 12px; }
+  .comm-title {
+    font-family: var(--ff-ui);
+    font-size: 17px; font-weight: 700;
+    color: #fff; margin-bottom: 8px;
+  }
+  .comm-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .comm-meta {
+    display: flex; gap: 16px;
+    font-size: 12px; color: var(--text-muted);
+  }
+
+  /* ===== DOWNLOAD CENTER ===== */
+  .download-center {
+    background: linear-gradient(135deg,
+      rgba(249,115,22,0.05) 0%,
+      rgba(0,212,255,0.03) 100%
+    );
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .dl-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem; align-items: center;
+  }
+  @media (max-width: 768px) { .dl-content { grid-template-columns: 1fr; } }
+  .dl-text h2 {
+    font-family: var(--ff-display);
+    font-size: 32px; font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .dl-text h2 span { color: var(--accent); }
+  .dl-text p { color: var(--text-secondary); margin-bottom: 2rem; font-size: 14px; line-height: 1.7; }
+  .dl-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .dl-btn {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 1px solid;
+  }
+  .dl-btn-pc {
+    background: rgba(249,115,22,0.1);
+    border-color: rgba(249,115,22,0.5);
+    color: #fff;
+  }
+  .dl-btn-pc:hover { background: var(--accent); box-shadow: 0 0 20px rgba(249,115,22,0.4); }
+  .dl-btn-mobile {
+    background: rgba(0,212,255,0.06);
+    border-color: rgba(0,212,255,0.3);
+    color: #fff;
+  }
+  .dl-btn-mobile:hover { background: rgba(0,212,255,0.12); box-shadow: 0 0 16px rgba(0,212,255,0.2); }
+  .dl-btn-icon { font-size: 24px; }
+  .dl-btn-text {}
+  .dl-btn-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .dl-btn-name {
+    font-family: var(--ff-ui);
+    font-size: 15px; font-weight: 700;
+    line-height: 1.2;
+  }
+  .dl-stats {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+  }
+  .dl-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+  .dl-stat-num {
+    font-family: var(--ff-display);
+    font-size: 28px; font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .dl-stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--bg-dark);
+    border-top: 1px solid var(--border);
+    padding: 4rem 2rem 2rem;
+    position: relative; z-index: 2;
+  }
+  .footer-grid {
+    max-width: 1400px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+  .footer-brand {}
+  .footer-logo {
+    font-family: var(--ff-display);
+    font-size: 22px; font-weight: 900;
+    color: #fff;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .footer-logo em { color: var(--accent); font-style: normal; }
+  .footer-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .social-links { display: flex; gap: 10px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .social-link:hover {
+    border-color: var(--accent);
+    background: rgba(249,115,22,0.08);
+  }
+  .footer-col-title {
+    font-family: var(--ff-ui);
+    font-size: 12px; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 8px; }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-primary); }
+  .footer-bottom {
+    max-width: 1400px; margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+  .footer-badges { display: flex; gap: 8px; }
+  .footer-badge {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: var(--ff-ui);
+    font-size: 10px; font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ===== DIVIDER LINE ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeInUp 0.6s ease forwards; }
+  .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards; animation-name: fadeInUp; animation-duration: 0.6s; animation-timing-function: ease; }
+  .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; animation-name: fadeInUp; animation-duration: 0.6s; animation-timing-function: ease; }
+  .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards; animation-name: fadeInUp; animation-duration: 0.6s; animation-timing-function: ease; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hero-visual { display: none; }
+    .hero-content { padding: 0 1.5rem; }
+    .hero-stats { left: 1.5rem; gap: 2rem; }
+    .section { padding: 3rem 1rem; }
+  }
+  @media (max-width: 600px) {
+    .hero-stats { flex-wrap: wrap; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>欢迎来到我的频道</h1>
-    </header>
-    <div class="container">
-        <h2>你好，我是 [你的名字]</h2>
-        <p>这是一个用 HTML 和 CSS 编写的简单网页。你可以在这里分享你的故事、项目或联系方式。</p>
-        <p>未来你可以给它添加 JavaScript 让它变得更生动！</p>
-        <a href="#" class="btn">了解更多</a>
+
+<div class="grid-bg"></div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><span>NX</span></div>
+    <div class="nav-logo-text"><em>NEXUS</em> GAME</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">首页</a></li>
+    <li><a href="#hot">热门游戏</a></li>
+    <li><a href="#new">新品上线</a></li>
+    <li><a href="#rank">游戏排行</a></li>
+    <li><a href="#community">玩家社区</a></li>
+    <li><a href="#download">下载中心</a></li>
+  </ul>
+  <div class="nav-search">
+    <input type="text" placeholder="搜索游戏、攻略...">
+    <span class="nav-search-icon">⌕</span>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-login">登录</button>
+    <button class="btn-register">注册</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-circuit"></div>
+  <div class="hero-content">
+    <div class="hero-badge fade-in">LIVE · 最火爆游戏平台</div>
+    <h1 class="hero-title fade-in-delay-1">
+      <span class="line1">进入</span><br>
+      <span class="line2">NEXT LEVEL</span><br>
+      <span class="line3">GAMING</span>
+    </h1>
+    <p class="hero-sub fade-in-delay-2">
+      全网最火爆游戏聚合平台 · 海量游戏一键下载 · 实时热度排行 · 玩家社区互动
+      <br>无论单机、网游、手游、主机，你的游戏宇宙从这里开始。
+    </p>
+    <div class="hero-buttons fade-in-delay-3">
+      <button class="btn-primary" onclick="document.getElementById('hot').scrollIntoView({behavior:'smooth'})">▶ 探索游戏</button>
+      <button class="btn-secondary" onclick="document.getElementById('rank').scrollIntoView({behavior:'smooth'})">◈ 查看排行榜</button>
     </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">8,420+</div><div class="stat-label">精选游戏</div></div>
+    <div class="stat-item"><div class="stat-num">2.1M</div><div class="stat-label">活跃玩家</div></div>
+    <div class="stat-item"><div class="stat-num">99.9%</div><div class="stat-label">可用率</div></div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-game-showcase">
+      <div class="showcase-corner tl"></div>
+      <div class="showcase-corner tr"></div>
+      <div class="showcase-corner bl"></div>
+      <div class="showcase-corner br"></div>
+      <div class="showcase-badge">🔥 TOP PICK</div>
+      <div class="showcase-inner">
+        <div class="showcase-sub">FEATURED GAME</div>
+        <div class="showcase-title">CYBER RAID</div>
+        <div class="showcase-rating">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-float-cards" style="position:relative;margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+      <div class="float-card">
+        <div class="float-card-dot online"></div>
+        <div class="float-card-text">在线玩家</div>
+        <div class="float-card-num">248,391</div>
+      </div>
+      <div class="float-card">
+        <div class="float-card-dot hot"></div>
+        <div class="float-card-text">今日下载</div>
+        <div class="float-card-num">+12,480</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== HOT GAMES ===== -->
+<section class="section categories" id="hot">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label">HOT GAMES</div>
+        <h2 class="section-title">热门游戏推荐</h2>
+      </div>
+      <a href="#" class="section-link">查看全部 →</a>
+    </div>
+
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" onclick="filterGames(this,'all')">全部游戏</button>
+      <button class="cat-tab" onclick="filterGames(this,'rpg')">RPG 角色扮演</button>
+      <button class="cat-tab" onclick="filterGames(this,'fps')">FPS 射击竞技</button>
+      <button class="cat-tab" onclick="filterGames(this,'racing')">赛车竞速</button>
+      <button class="cat-tab" onclick="filterGames(this,'casual')">休闲益智</button>
+      <button class="cat-tab" onclick="filterGames(this,'action')">动作冒险</button>
+      <button class="cat-tab" onclick="filterGames(this,'strategy')">策略塔防</button>
+      <button class="cat-tab" onclick="filterGames(this,'console')">主机游戏</button>
+      <button class="cat-tab" onclick="filterGames(this,'mobile')">手游专区</button>
+    </div>
+
+    <div class="games-grid" id="gamesGrid">
+      <!-- Cards injected by JS -->
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== RANKING ===== -->
+<section class="section" id="rank">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label">LEADERBOARD</div>
+        <h2 class="section-title">游戏热度排行</h2>
+      </div>
+    </div>
+    <div class="ranking-layout">
+      <div class="rank-list" id="rankList"></div>
+      <div class="leaderboard">
+        <div class="leaderboard-header">顶尖玩家</div>
+        <div class="leaderboard-list" id="lbList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== NEW RELEASES ===== -->
+<section class="section" id="new">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label">NEW RELEASES</div>
+        <h2 class="section-title">新品游戏上线</h2>
+      </div>
+      <a href="#" class="section-link">预约更多 →</a>
+    </div>
+    <div class="new-grid" id="newGrid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== COMMUNITY ===== -->
+<section class="section community-section" id="community">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-label">COMMUNITY</div>
+        <h2 class="section-title">玩家社区</h2>
+      </div>
+    </div>
+    <div class="community-grid">
+      <div class="community-card purple-accent">
+        <div class="comm-icon">⚔️</div>
+        <div class="comm-title">攻略秘籍交流区</div>
+        <div class="comm-desc">分享你的游戏心得、通关攻略与独家技巧，与数百万玩家共同探索游戏世界的每一个角落。</div>
+        <div class="comm-meta">
+          <span>👥 128,420 成员</span>
+          <span>💬 2,341 今日帖子</span>
+        </div>
+      </div>
+      <div class="community-card blue-accent">
+        <div class="comm-icon">🏆</div>
+        <div class="comm-title">竞技擂台赛事区</div>
+        <div class="comm-desc">参与官方及玩家自发组织的各类赛事，展示你的技术实力，赢取丰厚奖励与荣耀排名。</div>
+        <div class="comm-meta">
+          <span>🔥 正在进行 12 场赛事</span>
+          <span>🎖 总奖金池 ¥500,000</span>
+        </div>
+      </div>
+      <div class="community-card orange-accent">
+        <div class="comm-icon">📡</div>
+        <div class="comm-title">玩家直播&录像区</div>
+        <div class="comm-desc">实时直播你的游戏过程，或上传精彩录像片段，积累粉丝，建立属于你的游戏频道。</div>
+        <div class="comm-meta">
+          <span>📺 847 直播中</span>
+          <span>👁 3.2M 实时观看</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== DOWNLOAD CENTER ===== -->
+<section class="section download-center" id="download">
+  <div class="container">
+    <div class="dl-content">
+      <div class="dl-text">
+        <h2>随时随地<br><span>畅玩游戏</span></h2>
+        <p>无论你使用 Windows 电脑还是 iOS / Android 手机，NEXUS GAME 平台客户端均可完美适配，一键安装，极速启动，开箱即用。全平台游戏库实时同步，进度数据云端保存。</p>
+        <div class="dl-buttons">
+          <button class="dl-btn dl-btn-pc">
+            <span class="dl-btn-icon">🖥</span>
+            <span class="dl-btn-text">
+              <span class="dl-btn-label">Download for</span>
+              <span class="dl-btn-name">Windows PC</span>
+            </span>
+          </button>
+          <button class="dl-btn dl-btn-mobile">
+            <span class="dl-btn-icon">📱</span>
+            <span class="dl-btn-text">
+              <span class="dl-btn-label">Download for</span>
+              <span class="dl-btn-name">iOS / Android</span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="dl-stats">
+        <div class="dl-stat"><div class="dl-stat-num">8,420+</div><div class="dl-stat-label">游戏总数</div></div>
+        <div class="dl-stat"><div class="dl-stat-num">2.1M</div><div class="dl-stat-label">注册用户</div></div>
+        <div class="dl-stat"><div class="dl-stat-num">99.9%</div><div class="dl-stat-label">正常运行率</div></div>
+        <div class="dl-stat"><div class="dl-stat-num">24/7</div><div class="dl-stat-label">客服支持</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo"><em>NEXUS</em> GAME</div>
+      <div class="footer-desc">全网最火爆游戏综合服务平台，提供游戏发现、下载、排行、攻略与玩家社区一站式服务。</div>
+      <div class="social-links">
+        <div class="social-link">🐦</div>
+        <div class="social-link">💬</div>
+        <div class="social-link">📘</div>
+        <div class="social-link">📺</div>
+        <div class="social-link">🎮</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">游戏分类</div>
+      <ul class="footer-links">
+        <li><a href="#">RPG 角色扮演</a></li>
+        <li><a href="#">FPS 射击竞技</a></li>
+        <li><a href="#">动作冒险</a></li>
+        <li><a href="#">策略塔防</a></li>
+        <li><a href="#">休闲益智</a></li>
+        <li><a href="#">手游专区</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">平台服务</div>
+      <ul class="footer-links">
+        <li><a href="#">热门排行榜</a></li>
+        <li><a href="#">新品上线</a></li>
+        <li><a href="#">玩家社区</a></li>
+        <li><a href="#">游戏攻略</a></li>
+        <li><a href="#">下载中心</a></li>
+        <li><a href="#">赛事活动</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">联系我们</div>
+      <ul class="footer-links">
+        <li><a href="#">关于平台</a></li>
+        <li><a href="#">商务合作</a></li>
+        <li><a href="#">开发者接入</a></li>
+        <li><a href="#">用户协议</a></li>
+        <li><a href="#">隐私政策</a></li>
+        <li><a href="#">帮助中心</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 NEXUS GAME · 全网最火爆游戏平台 · 版权所有</div>
+    <div class="footer-badges">
+      <span class="footer-badge">SSL 安全</span>
+      <span class="footer-badge">正版认证</span>
+      <span class="footer-badge">全年无休</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== DATA =====
+const games = [
+  { id:1, name:'赛博突袭 Cyber Raid', cat:'fps', desc:'次世代赛博朋克风格战术射击，支持100人大逃杀模式', rating:9.6, dl:'1,240万', tags:['hot','top'], emoji:'🔫', color:'#1a0a2e', textColor:'rgba(180,77,255,0.6)', rank:1 },
+  { id:2, name:'龙之遗迹 Dragon Relic', cat:'rpg', desc:'史诗级开放世界RPG，超过800小时的主线与支线内容', rating:9.4, dl:'980万', tags:['hot','top'], emoji:'⚔️', color:'#1a1200', textColor:'rgba(249,115,22,0.5)', rank:2 },
+  { id:3, name:'星际殖民 Star Colony', cat:'strategy', desc:'宏观策略建设游戏，带领人类文明迈向星际时代', rating:9.2, dl:'720万', tags:['hot'], emoji:'🚀', color:'#001a1a', textColor:'rgba(0,212,255,0.5)', rank:3 },
+  { id:4, name:'极速狂飙 Turbo Rush', cat:'racing', desc:'物理引擎模拟真实赛车体验，200+ 赛道任你挑战', rating:8.8, dl:'540万', tags:['hot'], emoji:'🏎', color:'#1a0600', textColor:'rgba(255,100,0,0.5)', rank:4 },
+  { id:5, name:'荒野求生 Wild Survive', cat:'action', desc:'真实生存模拟，极限挑战自然环境与野生动物', rating:8.7, dl:'460万', tags:[], emoji:'🌲', color:'#001a08', textColor:'rgba(34,197,94,0.5)', rank:5 },
+  { id:6, name:'萌系大冒险 Cute Quest', cat:'casual', desc:'轻松休闲的横版冒险，适合全年龄段玩家', rating:8.5, dl:'380万', tags:['free'], emoji:'🌸', color:'#1a001a', textColor:'rgba(255,182,193,0.6)', rank:6 },
+  { id:7, name:'战神传说 War God Saga', cat:'console', desc:'主机独占AAA大作，电影级视觉体验', rating:9.8, dl:'320万', tags:['top'], emoji:'⚡', color:'#0d0028', textColor:'rgba(180,77,255,0.6)', rank:7 },
+  { id:8, name:'王者竞技 King Arena', cat:'mobile', desc:'手游国民级竞技MOBA，5v5 紧张团战', rating:8.9, dl:'2,800万', tags:['hot','free'], emoji:'👑', color:'#1a1400', textColor:'rgba(255,215,0,0.5)', rank:8 },
+];
+
+const newGames = [
+  { name:'量子幻境 Quantum Dream', date:'2025-06-01', emoji:'🌀', tag:'new' },
+  { name:'暗影猎手 Shadow Hunt', date:'2025-05-28', emoji:'🗡', tag:'new' },
+  { name:'废土纪元 Wasteland Era', date:'2025-05-20', emoji:'☢️', tag:'new' },
+  { name:'星海传说 Star Sea Legend', date:'2025-05-15', emoji:'🌌', tag:'pre' },
+  { name:'魔法学园 Magic Academy', date:'2025-06-10', emoji:'✨', tag:'pre' },
+  { name:'机甲战争 Mech Wars', date:'2025-06-15', emoji:'🤖', tag:'pre' },
+];
+
+const players = [
+  { rank:'1', name:'ShadowBlade_X', level:'Lv.99', score:'2,847,320', emoji:'🥇' },
+  { rank:'2', name:'NeonPhantom', level:'Lv.97', score:'2,643,100', emoji:'🥈' },
+  { rank:'3', name:'CyberGhost_01', level:'Lv.95', score:'2,418,880', emoji:'🥉' },
+  { rank:'4', name:'QuantumShift', level:'Lv.93', score:'2,201,450', emoji:'💎' },
+  { rank:'5', name:'VoidWalker', level:'Lv.91', score:'2,050,770', emoji:'⚡' },
+  { rank:'6', name:'StarForge_Z', level:'Lv.90', score:'1,988,120', emoji:'🔥' },
+  { rank:'7', name:'IronMaiden_Pro', level:'Lv.89', score:'1,876,340', emoji:'🎯' },
+];
+
+// ===== RENDER GAMES =====
+function renderGames(filter) {
+  const grid = document.getElementById('gamesGrid');
+  const filtered = filter === 'all' ? games : games.filter(g => g.cat === filter);
+  grid.innerHTML = filtered.map((g,i) => `
+    <div class="game-card">
+      ${g.rank <= 3 ? `<div class="top-badge"><span>T${g.rank}</span></div>` : ''}
+      <div class="game-card-img">
+        <div class="game-card-img-bg" style="background:${g.color};color:${g.textColor};width:100%;height:100%;font-size:56px;display:flex;align-items:center;justify-content:center;">
+          ${g.emoji}
+        </div>
+        <div class="game-card-img-overlay"></div>
+        <div class="game-tags-overlay">
+          ${g.tags.includes('hot') ? '<span class="tag tag-hot">🔥 火爆</span>' : ''}
+          ${g.tags.includes('top') ? '<span class="tag tag-top">👑 TOP</span>' : ''}
+          ${g.tags.includes('free') ? '<span class="tag tag-free">免费</span>' : ''}
+        </div>
+      </div>
+      <div class="game-card-body">
+        <div class="game-card-top">
+          <div class="game-card-name">${g.name}</div>
+          <div class="game-rating"><span>★</span><span>${g.rating}</span></div>
+        </div>
+        <div class="game-desc">${g.desc}</div>
+        <div class="game-card-footer">
+          <div class="game-dl">下载: <strong>${g.dl}</strong></div>
+          <button class="btn-dl">立即下载</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterGames(btn, cat) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderGames(cat);
+}
+
+// ===== RENDER RANKING =====
+function renderRanking() {
+  const list = document.getElementById('rankList');
+  list.innerHTML = games.map(g => {
+    const rankClass = g.rank === 1 ? 'gold' : g.rank === 2 ? 'silver' : g.rank === 3 ? 'bronze' : 'other';
+    const heatPct = Math.round(100 - (g.rank - 1) * 10);
+    return `
+      <div class="rank-item">
+        <div class="rank-num ${rankClass}">${String(g.rank).padStart(2,'0')}</div>
+        <div class="rank-cover">${g.emoji}</div>
+        <div class="rank-info">
+          <div class="rank-name">${g.name}</div>
+          <div class="rank-meta">
+            <span>📥 ${g.dl}</span>
+            <span>⭐ ${g.rating}</span>
+            <span style="color:var(--text-muted);text-transform:uppercase;font-size:11px;">${{fps:'FPS',rpg:'RPG',strategy:'策略',racing:'竞速',action:'动作',casual:'休闲',console:'主机',mobile:'手游'}[g.cat]}</span>
+          </div>
+        </div>
+        <div class="rank-heat">
+          ${(g.dl.replace(/万/,'') * 1).toFixed(0) < 100 ? g.dl : g.dl}
+          <small>热度指数</small>
+          <div class="heat-bar"><div class="heat-bar-fill" style="width:${heatPct}%"></div></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===== RENDER LEADERBOARD =====
+function renderLeaderboard() {
+  const list = document.getElementById('lbList');
+  list.innerHTML = players.map(p => {
+    const rc = p.rank <= 3 ? 'r'+p.rank : '';
+    return `
+      <div class="lb-item">
+        <div class="lb-rank ${rc}">${p.emoji}</div>
+        <div class="lb-avatar">${p.name[0]}</div>
+        <div class="lb-info">
+          <div class="lb-name">${p.name}</div>
+          <div class="lb-level">⚡ ${p.level}</div>
+        </div>
+        <div class="lb-score">${p.score}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===== RENDER NEW GAMES =====
+function renderNewGames() {
+  const grid = document.getElementById('newGrid');
+  grid.innerHTML = newGames.map(g => `
+    <div class="new-card">
+      <div class="new-card-img">
+        <span style="font-size:42px;">${g.emoji}</span>
+        <div class="game-tags-overlay">
+          ${g.tag === 'new' ? '<span class="tag tag-new">NEW</span>' : '<span class="tag" style="background:rgba(180,77,255,0.8);color:#fff;">预约</span>'}
+        </div>
+      </div>
+      <div class="new-card-body">
+        <div class="new-card-name">${g.name}</div>
+        <div class="new-card-date">📅 上线日期：${g.date}</div>
+        <button class="btn-pre">${g.tag === 'new' ? '立即下载' : '预约下载'}</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== NAV ACTIVE ON SCROLL =====
+function updateNavActive() {
+  const sections = ['home','hot','rank','new','community','download'];
+  const links = document.querySelectorAll('.nav-links a');
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 100) current = id;
+  });
+  links.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+}
+
+// ===== INIT =====
+renderGames('all');
+renderRanking();
+renderLeaderboard();
+renderNewGames();
+document.addEventListener('scroll', updateNavActive);
+</script>
 </body>
 </html>
